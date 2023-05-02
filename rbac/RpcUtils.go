@@ -19,16 +19,16 @@ func Init(rbacIp string, rbacPort int, clients []Client) {
 
 func GetClientSecret(clientId string) string {
 	for _, item := range clientList {
-		if item.clientId == clientId {
-			return item.clientSecret
+		if item.ClientId == clientId {
+			return item.ClientSecret
 		}
 	}
 	return ""
 }
 
 type Client struct {
-	clientId     string
-	clientSecret string
+	ClientId     string
+	ClientSecret string
 }
 
 func HttpPost(url string, param map[string]any) []byte {
