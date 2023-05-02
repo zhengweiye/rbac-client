@@ -1,3 +1,3 @@
-module github.com/zhengweiye/rbac
+module github.com/zhengweiye/rbac-client
 
 go 1.19
