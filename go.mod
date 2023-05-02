@@ -1,3 +1,3 @@
-module github.com/qb/rbac
+module github.com/zhengweiye/rbac
 
 go 1.19
