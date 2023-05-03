@@ -10,9 +10,9 @@ type Client struct {
 	ClientSecret string
 }
 
-func Init(rbacIp string, rbacPort int, clients []Client) {
-	rbacIp = rbacIp
-	rbacPort = rbacPort
+func Init(ip string, port int, clients []Client) {
+	rbacIp = ip
+	rbacPort = port
 	clientList = clients
 }
 
