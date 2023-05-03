@@ -17,13 +17,16 @@ func NewMenuService() MenuService {
 }
 
 func (m MenuServiceImpl) FindMenus(clientId string, userId int) []RpcMenusVo {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/menu/findMenus")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/menu/findMenus")
 
 	var param = make(map[string]any)
 	param["clientId"] = clientId
 	param["userId"] = userId
 
 	resBytes := HttpPost(url, param)
+	if resBytes == nil {
+		return nil
+	}
 
 	var result []RpcMenusVo
 	err := json.Unmarshal(resBytes, &result)
@@ -35,14 +38,16 @@ func (m MenuServiceImpl) FindMenus(clientId string, userId int) []RpcMenusVo {
 }
 
 func (m MenuServiceImpl) FindFuncs(clientId string, userId int) []string {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/menu/findFuncs")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/menu/findFuncs")
 
 	var param = make(map[string]any)
 	param["clientId"] = clientId
 	param["userId"] = userId
 
 	resBytes := HttpPost(url, param)
-
+	if resBytes == nil {
+		return nil
+	}
 	var result []string
 	err := json.Unmarshal(resBytes, &result)
 	if err != nil {

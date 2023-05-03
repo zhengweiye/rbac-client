@@ -1,14 +1,13 @@
 package rbac
 
 type RpcLoginTokenVo struct {
-	Error            string            `json:"error"`
-	ErrorDescription string            `json:"error_description"`
-	AccessToken      string            `json:"access_token"`
-	TokenType        string            `json:"token_type"`
-	RefreshToken     string            `json:"refresh_token"`
-	ExpiresIn        int               `json:"expires_in"`
-	Scope            string            `json:"scope"`
-	UserInfo         RpcLoginTokenUser `json:"user_info"`
+	AccessToken  string            `json:"accessToken"`
+	RefreshToken string            `json:"refreshToken"`
+	TokenType    string            `json:"tokenType"`
+	ExpiresIn    int               `json:"expiresIn"`
+	Scope        string            `json:"scope"`
+	UserType     string            `json:"userType"`
+	UserInfo     RpcLoginTokenUser `json:"userInfo"`
 }
 type RpcLoginTokenUser struct {
 	UserId   int    `json:"userId"`
@@ -16,9 +15,7 @@ type RpcLoginTokenUser struct {
 }
 
 type RpcTokenVo struct {
-	UserId      int      `json:"userId"`
-	UserName    string   `json:"userName"`
-	Principal   string   `json:"principal"`
-	UserType    string   `json:"userType"`
-	Authorities []string `json:"authorities"`
+	AccessToken RpcLoginTokenVo `json:"accessToken"`
+	ClientId    int             `json:"clientId"`
+	Authorities []string        `json:"authorities"`
 }

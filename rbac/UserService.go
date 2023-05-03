@@ -6,10 +6,12 @@ import (
 )
 
 type UserService interface {
-	FindUserInfo(userId int) RpcUserDetailVo
+	FindUserInfo(userId int) *RpcUserDetailVo
 	FindUserListByDeptId(deptId int) []RpcUserVo
 	FindUserListByRoleId(roleId int) []RpcUserVo
 	FindUserList(roleId int, deptIds []int) []RpcUserVo
+	FindNames(ids []int) []RpcNameVo
+	FindName(id int) *RpcNameVo
 
 	FindDataScopeOfDept(userId int) []int
 	FindDataScopeOfUser(userId int) []int
@@ -30,13 +32,16 @@ func NewUserService() UserService {
 	return UserServiceImpl{}
 }
 
-func (u UserServiceImpl) FindUserInfo(userId int) RpcUserDetailVo {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/findUserInfo")
+func (u UserServiceImpl) FindUserInfo(userId int) *RpcUserDetailVo {
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/findUserInfo")
 
 	var param = make(map[string]any)
 	param["userId"] = userId
 
 	resBytes := HttpPost(url, param)
+	if resBytes == nil {
+		return nil
+	}
 
 	var result RpcUserDetailVo
 	err := json.Unmarshal(resBytes, &result)
@@ -44,17 +49,19 @@ func (u UserServiceImpl) FindUserInfo(userId int) RpcUserDetailVo {
 		panic(err)
 	}
 
-	return result
+	return &result
 }
 
 func (u UserServiceImpl) FindUserListByDeptId(deptId int) []RpcUserVo {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/findUserListByDeptId")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/findUserListByDeptId")
 
 	var param = make(map[string]any)
 	param["deptId"] = deptId
 
 	resBytes := HttpPost(url, param)
-
+	if resBytes == nil {
+		return nil
+	}
 	var result []RpcUserVo
 	err := json.Unmarshal(resBytes, &result)
 	if err != nil {
@@ -65,13 +72,15 @@ func (u UserServiceImpl) FindUserListByDeptId(deptId int) []RpcUserVo {
 }
 
 func (u UserServiceImpl) FindUserListByRoleId(roleId int) []RpcUserVo {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/findUserListByRoleId")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/findUserListByRoleId")
 
 	var param = make(map[string]any)
 	param["roleId"] = roleId
 
 	resBytes := HttpPost(url, param)
-
+	if resBytes == nil {
+		return nil
+	}
 	var result []RpcUserVo
 	err := json.Unmarshal(resBytes, &result)
 	if err != nil {
@@ -82,14 +91,16 @@ func (u UserServiceImpl) FindUserListByRoleId(roleId int) []RpcUserVo {
 }
 
 func (u UserServiceImpl) FindUserList(roleId int, deptIds []int) []RpcUserVo {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/findUserList")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/findUserList")
 
 	var param = make(map[string]any)
 	param["roleId"] = roleId
 	param["deptIds"] = deptIds
 
 	resBytes := HttpPost(url, param)
-
+	if resBytes == nil {
+		return nil
+	}
 	var result []RpcUserVo
 	err := json.Unmarshal(resBytes, &result)
 	if err != nil {
@@ -99,14 +110,55 @@ func (u UserServiceImpl) FindUserList(roleId int, deptIds []int) []RpcUserVo {
 	return result
 }
 
+func (u UserServiceImpl) FindNames(ids []int) []RpcNameVo {
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/findNames")
+
+	var param = make(map[string]any)
+	param["ids"] = ids
+
+	resBytes := HttpPost(url, param)
+	if resBytes == nil {
+		return nil
+	}
+	var result []RpcNameVo
+	err := json.Unmarshal(resBytes, &result)
+	if err != nil {
+		panic(err)
+	}
+
+	return result
+}
+
+func (u UserServiceImpl) FindName(id int) *RpcNameVo {
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/findName")
+
+	var param = make(map[string]any)
+	param["id"] = id
+
+	resBytes := HttpPost(url, param)
+	if resBytes == nil {
+		return nil
+	}
+
+	var result RpcNameVo
+	err := json.Unmarshal(resBytes, &result)
+	if err != nil {
+		panic(err)
+	}
+
+	return &result
+}
+
 func (u UserServiceImpl) FindDataScopeOfDept(userId int) []int {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/findDataScopeOfDept")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/findDataScopeOfDept")
 
 	var param = make(map[string]any)
 	param["userId"] = userId
 
 	resBytes := HttpPost(url, param)
-
+	if resBytes == nil {
+		return nil
+	}
 	var result []int
 	err := json.Unmarshal(resBytes, &result)
 	if err != nil {
@@ -117,13 +169,15 @@ func (u UserServiceImpl) FindDataScopeOfDept(userId int) []int {
 }
 
 func (u UserServiceImpl) FindDataScopeOfUser(userId int) []int {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/findDataScopeOfUser")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/findDataScopeOfUser")
 
 	var param = make(map[string]any)
 	param["userId"] = userId
 
 	resBytes := HttpPost(url, param)
-
+	if resBytes == nil {
+		return nil
+	}
 	var result []int
 	err := json.Unmarshal(resBytes, &result)
 	if err != nil {
@@ -134,7 +188,7 @@ func (u UserServiceImpl) FindDataScopeOfUser(userId int) []int {
 }
 
 func (u UserServiceImpl) CreateUser(phone, password, realName, jobName, userType string, deptId int) int {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/createUser")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/createUser")
 
 	var param = make(map[string]any)
 	param["phone"] = phone
@@ -145,7 +199,9 @@ func (u UserServiceImpl) CreateUser(phone, password, realName, jobName, userType
 	param["deptId"] = deptId
 
 	resBytes := HttpPost(url, param)
-
+	if resBytes == nil {
+		return 0
+	}
 	var result int
 	err := json.Unmarshal(resBytes, &result)
 	if err != nil {
@@ -156,7 +212,7 @@ func (u UserServiceImpl) CreateUser(phone, password, realName, jobName, userType
 }
 
 func (u UserServiceImpl) UpdateWxInfo(userId int, nickName, avatarUrl string) {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/updateUserWxInfo")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/updateUserWxInfo")
 
 	var param = make(map[string]any)
 	param["userId"] = userId
@@ -167,7 +223,7 @@ func (u UserServiceImpl) UpdateWxInfo(userId int, nickName, avatarUrl string) {
 }
 
 func (u UserServiceImpl) UpdatePwd(userId int, password string) {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/updateUserPwd")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/updateUserPwd")
 
 	var param = make(map[string]any)
 	param["userId"] = userId
@@ -177,7 +233,7 @@ func (u UserServiceImpl) UpdatePwd(userId int, password string) {
 }
 
 func (u UserServiceImpl) UpdateName(userId int, realName string) {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/updateUserName")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/updateUserName")
 
 	var param = make(map[string]any)
 	param["userId"] = userId
@@ -187,7 +243,7 @@ func (u UserServiceImpl) UpdateName(userId int, realName string) {
 }
 
 func (u UserServiceImpl) UpdateDepts(userId int, deptIds []int) {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/updateUserDepts")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/updateUserDepts")
 
 	var param = make(map[string]any)
 	param["userId"] = userId
@@ -197,7 +253,7 @@ func (u UserServiceImpl) UpdateDepts(userId int, deptIds []int) {
 }
 
 func (u UserServiceImpl) DeleteById(userId int) {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/deleteUserById")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/deleteUserById")
 
 	var param = make(map[string]any)
 	param["userId"] = userId
@@ -206,7 +262,7 @@ func (u UserServiceImpl) DeleteById(userId int) {
 }
 
 func (u UserServiceImpl) DeleteByTypeAndPhone(userType string, phone string) {
-	url := fmt.Sprintf("http://%s:%d/%s", RbacIp, RbacPort, "rpc/user/deleteUserByTypeAndPhone")
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/deleteUserByTypeAndPhone")
 
 	var param = make(map[string]any)
 	param["userType"] = userType

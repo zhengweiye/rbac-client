@@ -4,31 +4,26 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"net"
 	"net/http"
+	"time"
 )
 
-var RbacIp string
-var RbacPort int
-var clientList []Client
-
-func Init(rbacIp string, rbacPort int, clients []Client) {
-	RbacIp = rbacIp
-	RbacPort = rbacPort
-	clientList = clients
-}
-
-func GetClientSecret(clientId string) string {
-	for _, item := range clientList {
-		if item.ClientId == clientId {
-			return item.ClientSecret
-		}
-	}
-	return ""
-}
-
-type Client struct {
-	ClientId     string
-	ClientSecret string
+// 创建客户端
+var client = &http.Client{
+	//请求超时时间
+	Timeout: time.Second * 30,
+	// 创建连接池
+	Transport: &http.Transport{
+		DialContext: (&net.Dialer{
+			Timeout:   30 * time.Second, // 连接超时
+			KeepAlive: 30 * time.Second, // 长连接超时时间
+		}).DialContext,
+		MaxIdleConns:          100,              // 最大空闲连接
+		IdleConnTimeout:       90 * time.Second, // 空闲超时时间
+		TLSHandshakeTimeout:   10 * time.Second, // tls握手超时时间
+		ExpectContinueTimeout: 1 * time.Second,  // 100-continue状态码超时时间
+	},
 }
 
 func HttpPost(url string, param map[string]any) []byte {
@@ -41,14 +36,14 @@ func HttpPost(url string, param map[string]any) []byte {
 		body = bytes.NewReader(reqBytes)
 	}
 
-	resp, err := http.Post(url, "application/json", body)
+	resp, err := client.Post(url, "application/json", body)
 	defer resp.Body.Close()
 
 	if err != nil {
 		panic(err)
 	}
 
-	//TODO 读取io
+	//TODO 读取io！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
 	resBytes, err := io.ReadAll(resp.Body)
 	if err != nil {
 		panic(err)
