@@ -65,46 +65,51 @@ func HttpPost(url string, param map[string]any) []byte {
 		codeInt := code.(int)
 		if codeInt != 200 {
 			msg := m["msg"]
-			if msg != nil {
+			if msg == nil {
 				panic("没有msg字段")
+			} else {
+				panic(msg)
 			}
-			panic(msg)
 		}
 	case int32:
 		codeInt := code.(int32)
 		if codeInt != 200 {
 			msg := m["msg"]
-			if msg != nil {
+			if msg == nil {
 				panic("没有msg字段")
+			} else {
+				panic(msg)
 			}
-			panic(msg)
 		}
 	case int64:
 		codeInt := code.(int64)
 		if codeInt != 200 {
 			msg := m["msg"]
-			if msg != nil {
+			if msg == nil {
 				panic("没有msg字段")
+			} else {
+				panic(msg)
 			}
-			panic(msg)
 		}
 	case float32:
 		codeInt := code.(float32)
 		if codeInt != 200 {
 			msg := m["msg"]
-			if msg != nil {
+			if msg == nil {
 				panic("没有msg字段")
+			} else {
+				panic(msg)
 			}
-			panic(msg)
 		}
 	case float64:
 		codeInt := code.(float64)
 		if codeInt != 200 {
 			msg := m["msg"]
-			if msg != nil {
+			if msg == nil {
 				panic("没有msg字段")
+			} else {
+				panic(msg)
 			}
-			panic(msg)
 		}
 	}
 
