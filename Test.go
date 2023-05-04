@@ -14,7 +14,7 @@ func main() {
 		GatewayHost:      "192.168.1.143",
 		GatewayPort:      80,
 		GatewayEnabled:   true,
-		GatewayUrl:       "ws://%s:%d/ws/urlAuthen?connId=%s&routeName=%s",
+		GatewayUrl:       "ws://%s:%d/ws/syncExecuteUrl?connId=%s&routeName=%s",
 		GatewayRouteName: "route_law_base",
 	}
 	//rbac.ConnToRbacWs(ws, nil)
