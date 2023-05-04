@@ -21,7 +21,16 @@ func NewOauthService() OauthService {
 	return OauthServiceImpl{}
 }
 
+func (o OauthServiceImpl) validateClientId(clientId string) {
+	clientSecret := GetClientSecret(clientId)
+	if clientSecret == "" || len(clientSecret) == 0 {
+		panic(fmt.Sprintf("客户端ID[%s]不存在", clientId))
+	}
+}
+
 func (o OauthServiceImpl) LoginByPassword(clientId, username, password string) *RpcLoginTokenVo {
+	o.validateClientId(clientId)
+
 	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/oauth/login")
 
 	var param = make(map[string]any)
@@ -45,6 +54,8 @@ func (o OauthServiceImpl) LoginByPassword(clientId, username, password string) *
 }
 
 func (o OauthServiceImpl) LoginBySms(clientId, phone, code string) *RpcLoginTokenVo {
+	o.validateClientId(clientId)
+
 	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/oauth/login")
 
 	var param = make(map[string]any)
@@ -68,6 +79,8 @@ func (o OauthServiceImpl) LoginBySms(clientId, phone, code string) *RpcLoginToke
 }
 
 func (o OauthServiceImpl) LoginByWechatPc(clientId, openId, phone, smscode string) *RpcLoginTokenVo {
+	o.validateClientId(clientId)
+
 	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/oauth/login")
 
 	var param = make(map[string]any)
@@ -92,6 +105,7 @@ func (o OauthServiceImpl) LoginByWechatPc(clientId, openId, phone, smscode strin
 }
 
 func (o OauthServiceImpl) LoginByWechatApp(clientId, openId, phone, nickName, avatarUrl string) *RpcLoginTokenVo {
+	o.validateClientId(clientId)
 	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/oauth/login")
 
 	var param = make(map[string]any)
@@ -117,6 +131,7 @@ func (o OauthServiceImpl) LoginByWechatApp(clientId, openId, phone, nickName, av
 }
 
 func (o OauthServiceImpl) RefreshToken(clientId, refreshToken string) *RpcLoginTokenVo {
+	o.validateClientId(clientId)
 	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/oauth/refreshToken")
 
 	var param = make(map[string]any)
