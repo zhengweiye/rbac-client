@@ -25,11 +25,11 @@ func ConnToRbacWs(ws Ws, timeTicker *time.Ticker) {
 			}
 		}
 
-		fmt.Println("连接失败：", err, content)
+		fmt.Println("连接Rbac失败：", err, content)
 		reconnToRbac(ws)
 		return
 	} else {
-		fmt.Println("连接成功：", res)
+		fmt.Println("连接Rbac成功：", res)
 	}
 	wsRbacConn = conn
 	if timeTicker != nil {

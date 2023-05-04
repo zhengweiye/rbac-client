@@ -11,15 +11,16 @@ type Client struct {
 }
 
 type Ws struct {
-	RbacHost       string
-	RbacPort       int
-	RbacEnabled    bool
-	RbacUrl        string
-	ClientId       string
-	GatewayHost    string
-	GatewayPort    int
-	GatewayEnabled bool
-	GatewayUrl     string
+	RbacHost         string
+	RbacPort         int
+	RbacEnabled      bool
+	RbacUrl          string
+	ClientId         string
+	GatewayHost      string
+	GatewayPort      int
+	GatewayEnabled   bool
+	GatewayUrl       string
+	GatewayRouteName string
 }
 
 func Init(ip string, port int, clients []Client, ws Ws, handleService SyncHandleService) {
@@ -31,7 +32,7 @@ func Init(ip string, port int, clients []Client, ws Ws, handleService SyncHandle
 		ConnToRbacWs(ws, nil)
 	}
 	if ws.GatewayEnabled {
-		ConnToGatewayWs(ws)
+		ConnToGatewayWs(ws, nil)
 	}
 	syncHandleService = handleService
 }
