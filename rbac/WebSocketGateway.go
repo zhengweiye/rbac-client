@@ -91,19 +91,23 @@ func receiveMsgFromGateway() {
 		if err != nil {
 			break
 		}
-		fmt.Println("msgType=", msgType, string(msgBytes))
 
 		if msgType == 2 {
-			var mapData = make(map[string]any)
-			err = json.Unmarshal(msgBytes, &mapData)
+			var syncUrl SyncUrl
+			err = json.Unmarshal(msgBytes, &syncUrl)
 			if err == nil {
 				//TODO 子协程处理
-				go handleGatewayMsg(mapData)
+				go handleGatewayMsg(syncUrl)
 			}
 		}
 	}
 }
 
-func handleGatewayMsg(mapData map[string]any) {
-	fmt.Println("业务数据：", mapData)
+func handleGatewayMsg(syncUrl SyncUrl) {
+	if syncUrl.Type == "include" {
+		syncHandleService.IncludeUrls(syncUrl.Urls)
+
+	} else if syncUrl.Type == "exclude" {
+		syncHandleService.ExcludeUrls(syncUrl.Urls)
+	}
 }

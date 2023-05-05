@@ -5,6 +5,8 @@ type SyncHandleService interface {
 	SaveOrUpdateDepts(deptList []SyncDept)
 	DelAndSaveUsers(userList []SyncUser)
 	DelAndSaveDepts(deptList []SyncDept)
+	ExcludeUrls(urls []string)
+	IncludeUrls(urls []string)
 }
 
 type SyncDept struct {
@@ -24,4 +26,10 @@ type SyncUser struct {
 	UserType  string `json:"userType"`
 	DeptIds   []int  `json:"deptIds"`
 	Enabled   bool   `json:"enabled"`
+}
+
+type SyncUrl struct {
+	Type      string   `json:"type"`
+	RouteName string   `json:"routeName"`
+	Urls      []string `json:"urls"`
 }

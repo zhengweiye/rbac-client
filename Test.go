@@ -11,7 +11,7 @@ func main() {
 		RbacUrl:          "ws://%s:%d/ws/syncData?connId=%s&applicationName=%s",
 		ClientId:         "fastflow",
 		RbacEnabled:      true,
-		GatewayHost:      "192.168.1.143",
+		GatewayHost:      "127.0.0.1",
 		GatewayPort:      80,
 		GatewayEnabled:   true,
 		GatewayUrl:       "ws://%s:%d/ws/syncExecuteUrl?connId=%s&routeName=%s",
