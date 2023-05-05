@@ -17,6 +17,6 @@ func main() {
 		GatewayUrl:       "ws://%s:%d/ws/syncExecuteUrl?connId=%s&routeName=%s",
 		GatewayRouteName: "route_law_base",
 	}
-	//rbac.ConnToRbacWs(ws, nil)
-	rbac.ConnToGatewayWs(ws, nil)
+	rbac.ConnToRbacWs(ws, nil)
+	//rbac.ConnToGatewayWs(ws, nil)
 }

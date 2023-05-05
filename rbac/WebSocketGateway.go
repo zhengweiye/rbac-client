@@ -104,6 +104,12 @@ func receiveMsgFromGateway() {
 }
 
 func handleGatewayMsg(syncUrl SyncUrl) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("WebSocketGateway#handleGatewayMsg执行错误：", err)
+		}
+	}()
+
 	if syncUrl.Type == "include" {
 		syncHandleService.IncludeUrls(syncUrl.Urls)
 

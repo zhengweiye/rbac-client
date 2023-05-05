@@ -103,6 +103,12 @@ func receiveMsgFromRbac() {
 }
 
 func handleRbacMsg(mapData map[string]any) {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("WebSocketRbac#handleRbacMsg执行错误：", err)
+		}
+	}()
+
 	operType, ok1 := mapData["operType"]
 	tableName, ok2 := mapData["tableName"]
 	list, ok3 := mapData["list"]

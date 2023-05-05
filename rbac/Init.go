@@ -27,14 +27,14 @@ func Init(ip string, port int, clients []Client, ws Ws, handleService SyncHandle
 	rbacIp = ip
 	rbacPort = port
 	clientList = clients
+	syncHandleService = handleService
 
 	if ws.RbacEnabled {
-		ConnToRbacWs(ws, nil)
+		go ConnToRbacWs(ws, nil)
 	}
 	if ws.GatewayEnabled {
-		ConnToGatewayWs(ws, nil)
+		go ConnToGatewayWs(ws, nil)
 	}
-	syncHandleService = handleService
 }
 
 func GetClientSecret(clientId string) string {
