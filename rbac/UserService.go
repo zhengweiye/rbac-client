@@ -16,7 +16,7 @@ type UserService interface {
 	FindDataScopeOfDept(userId int) []int
 	FindDataScopeOfUser(userId int) []int
 
-	CreateUser(phone, password, realName, jobName, userType string, deptId int) int
+	CreateUser(phone, password, realName, jobName, userType string, deptId int, roleIds []int) int
 	UpdateWxInfo(userId int, nickName, avatarUrl string)
 	UpdatePwd(userId int, password string)
 	UpdateName(userId int, realName string)
@@ -187,7 +187,7 @@ func (u UserServiceImpl) FindDataScopeOfUser(userId int) []int {
 	return result
 }
 
-func (u UserServiceImpl) CreateUser(phone, password, realName, jobName, userType string, deptId int) int {
+func (u UserServiceImpl) CreateUser(phone, password, realName, jobName, userType string, deptId int, roleIds []int) int {
 	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/createUser")
 
 	var param = make(map[string]any)
@@ -197,6 +197,7 @@ func (u UserServiceImpl) CreateUser(phone, password, realName, jobName, userType
 	param["jobName"] = jobName
 	param["userType"] = userType
 	param["deptId"] = deptId
+	param["roleIds"] = roleIds
 
 	resBytes := HttpPost(url, param)
 	if resBytes == nil {

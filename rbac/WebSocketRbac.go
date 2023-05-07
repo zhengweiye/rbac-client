@@ -26,18 +26,22 @@ func ConnToRbacWs(ws Ws, timeTicker *time.Ticker) {
 		}
 
 		fmt.Println("连接Rbac失败：", err, content)
-		reconnToRbac(ws)
+		reconnToRbac(ws) // TODO 连接错误时，重连
 		return
 	} else {
 		fmt.Println("连接Rbac成功：", res)
 	}
+
+	// 连接赋值
 	wsRbacConn = conn
+
+	// 停止定时器
 	if timeTicker != nil {
 		timeTicker.Stop()
 	}
 
 	// 关闭连接（receiveMsgFromRbac退出for循环时）
-	defer reconnToRbac(ws)
+	defer reconnToRbac(ws) // TODO 连接断开时，重连
 
 	// 发送消息
 	go heartBeatToRbac()
@@ -76,8 +80,10 @@ func heartBeatToRbac() {
 
 		if wsRbacConn != nil {
 			//TODO 写法一
-			wsRbacConn.WriteMessage(websocket.TextMessage, []byte("ping"))
-
+			err := wsRbacConn.WriteMessage(websocket.TextMessage, []byte("ping"))
+			if err != nil {
+				fmt.Println("heartBeatToRbac：发送心跳失败...")
+			}
 			//TODO 写法二
 			//pingHandler := wsRbacConn.PingHandler()
 			//pingHandler("ping")
@@ -89,14 +95,13 @@ func receiveMsgFromRbac() {
 	for {
 		msgType, msgBytes, err := wsRbacConn.ReadMessage()
 		if err != nil {
-			break
+			break //TODO 断开连接
 		}
 		if msgType == 2 {
 			var mapData = make(map[string]any)
 			err = json.Unmarshal(msgBytes, &mapData)
-			if err == nil {
-				//TODO 子协程处理
-				go handleRbacMsg(mapData)
+			if err == nil { // TODO 解析json错误，不需要断开连接
+				handleRbacMsg(mapData)
 			}
 		}
 	}
@@ -105,7 +110,7 @@ func receiveMsgFromRbac() {
 func handleRbacMsg(mapData map[string]any) {
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println("WebSocketRbac#handleRbacMsg执行错误：", err)
+			fmt.Println("WebSocketRbac##handleRbacMsg执行错误：", err)
 		}
 	}()
 

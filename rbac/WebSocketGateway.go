@@ -26,18 +26,22 @@ func ConnToGatewayWs(ws Ws, timeTicker *time.Ticker) {
 		}
 
 		fmt.Println("连接Gateway失败：", err, content)
-		reconnToGateway(ws)
+		reconnToGateway(ws) // TODO 连接错误时，重连
 		return
 	} else {
 		fmt.Println("连接Gateway成功：", res)
 	}
+
+	// 连接赋值
 	wsGatewayConn = conn
+
+	// 停止定时器
 	if timeTicker != nil {
 		timeTicker.Stop()
 	}
 
 	// 关闭连接（receiveMsgFromRbac退出for循环时）
-	defer reconnToGateway(ws)
+	defer reconnToGateway(ws) // TODO 连接断开时，重连
 
 	// 发送消息
 	go heartBeatToGateway()
@@ -76,8 +80,10 @@ func heartBeatToGateway() {
 
 		if wsGatewayConn != nil {
 			//TODO 写法一
-			wsGatewayConn.WriteMessage(websocket.TextMessage, []byte("ping"))
-
+			err := wsGatewayConn.WriteMessage(websocket.TextMessage, []byte("ping"))
+			if err != nil {
+				fmt.Println("heartBeatToRbac：发送心跳失败...")
+			}
 			//TODO 写法二
 			//pingHandler := wsRbacConn.PingHandler()
 			//pingHandler("ping")
@@ -89,15 +95,13 @@ func receiveMsgFromGateway() {
 	for {
 		msgType, msgBytes, err := wsGatewayConn.ReadMessage()
 		if err != nil {
-			break
+			break //TODO 断开连接
 		}
-
 		if msgType == 2 {
 			var syncUrl SyncUrl
 			err = json.Unmarshal(msgBytes, &syncUrl)
-			if err == nil {
-				//TODO 子协程处理
-				go handleGatewayMsg(syncUrl)
+			if err == nil { // TODO 解析json错误，不需要断开连接
+				handleGatewayMsg(syncUrl)
 			}
 		}
 	}
@@ -106,7 +110,7 @@ func receiveMsgFromGateway() {
 func handleGatewayMsg(syncUrl SyncUrl) {
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println("WebSocketGateway#handleGatewayMsg执行错误：", err)
+			fmt.Println("WebSocketGateway##handleGatewayMsg执行错误：", err)
 		}
 	}()
 
