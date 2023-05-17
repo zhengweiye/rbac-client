@@ -12,6 +12,7 @@ type UserService interface {
 	FindUserList(roleId int, deptIds []int) []RpcUserVo
 	FindNames(ids []int) []RpcNameVo
 	FindName(id int) *RpcNameVo
+	FindLeaderIds(id int) []int
 
 	FindDataScopeOfDept(userId int) []int
 	FindDataScopeOfUser(userId int) []int
@@ -147,6 +148,26 @@ func (u UserServiceImpl) FindName(id int) *RpcNameVo {
 	}
 
 	return &result
+}
+
+func (u UserServiceImpl) FindLeaderIds(id int) []int {
+	url := fmt.Sprintf("http://%s:%d/%s", GetIP(), GetPort(), "rpc/user/findLeaderIds")
+
+	var param = make(map[string]any)
+	param["id"] = id
+
+	resBytes := HttpPost(url, param)
+	if resBytes == nil {
+		return nil
+	}
+
+	var result []int
+	err := json.Unmarshal(resBytes, &result)
+	if err != nil {
+		panic(err)
+	}
+
+	return result
 }
 
 func (u UserServiceImpl) FindDataScopeOfDept(userId int) []int {
